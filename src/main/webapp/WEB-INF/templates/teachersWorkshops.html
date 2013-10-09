@@ -1,0 +1,30 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Workshop statistics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+
+        <h1>Your workshops</h1>
+        <div th:each="workshop : ${workshops}">
+            <h2 th:text="${workshop.getKey()}">Workshop name</h2>
+            <div th:each="studentsInRole : ${workshop.getValue()}">
+                <h3>Role: <span th:text="${studentsInRole.getKey()}">Workshop name</span></h3>
+                <div th:each="student : ${studentsInRole.getValue()}">
+                    <p th:text="${student.name}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
