@@ -33,30 +33,11 @@ Also, having gradle >= 1.6 would be nice, but you can go without it, thanks to g
 - There should be a landing page with list of all workshops.
 - Lists of all workshops should be divided to morning and evening slots.
 
-## User stories
+## By the way
 
-As a student, when I go to the web site the system:
+The HEAD version of this repo is supposed to be nearly empty, as to not spoil all the fun.
 
-- should show lists of morning and evening workshops
-- should allow me to login with email
-
-As a logged student, I:
-
-- should see what I've registered for
-- should see workshops still available to me in the morning and in the evening
-- should be able to register for a workshop
-- should not be able to register for a workshop if I'm already registered for a workshop in that time
-- should not be able to register for a workshop I'm already registerd for
-- should not be able to register for a workshop if it's full
-- should be able to unregister from a workshop
-- should not be able to unregister if I'm not registered for that workshop
-
-As a teacher, I:
-
-- should be able to login with email
-- should see who has registered for my workshops, grouped by student's role
-
-
+Checkout "full version" commit (9185fc7) for final version.
 
 
 
