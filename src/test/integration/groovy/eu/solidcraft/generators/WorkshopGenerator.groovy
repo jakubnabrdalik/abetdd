@@ -1,5 +1,6 @@
 package eu.solidcraft.generators
 import eu.solidcraft.registration.Session
+import eu.solidcraft.registration.User
 import eu.solidcraft.registration.Workshop
 import eu.solidcraft.registration.WorkshopRepository
 
@@ -9,6 +10,30 @@ class WorkshopGenerator {
 
     WorkshopGenerator(WorkshopRepository workshopRepository) {
         this.workshopRepository = workshopRepository
+    }
+
+    Workshop saveNewAndRegister(User user) {
+        return saveNewAndRegister(Session.MORNING, user)
+    }
+
+    Workshop saveNewAndRegister(Session session, User user) {
+        Workshop workshop = saveNew(session)
+        workshop.register(user)
+        workshopRepository.save(workshop)
+        return workshop
+    }
+
+    Workshop saveNew() {
+        return saveNew([:])
+    }
+
+    Workshop saveNew(Map properties) {
+        Workshop workshop = create()
+        properties.each { String key, Object value ->
+            workshop.("$key") = value
+        }
+        workshopRepository.save(workshop)
+        return workshop
     }
 
     Workshop saveNew(Session session) {

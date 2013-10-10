@@ -5,8 +5,7 @@ import eu.solidcraft.generators.WorkshopGenerator
 import eu.solidcraft.testbase.IntegrationSpec
 import org.springframework.beans.factory.annotation.Autowired
 
-class TeacherIntegrationSpec extends IntegrationSpec {
-    @Autowired TeacherController controller
+class WorkshopRepositorySpec extends IntegrationSpec {
     @Autowired WorkshopRepository workshopRepository
     @Autowired UserRepository userRepository
     WorkshopGenerator workshopGenerator
@@ -17,17 +16,18 @@ class TeacherIntegrationSpec extends IntegrationSpec {
         workshopGenerator = new WorkshopGenerator(workshopRepository)
         userGenerator = new UserGenerator(userRepository)
         user = userGenerator.saveNew()
-        userRepository.save(user)
     }
 
-    def "should see who has registered for my workshops, grouped by student's role"() {
+    void "should find workshops by student"() {
         given:
-            Workshop workshop = workshopGenerator.saveNewAndRegister(Session.EVENING, user)
+            workshopGenerator.saveNewAndRegister(Session.MORNING, user)
+            workshopGenerator.saveNewAndRegister(Session.EVENING, user)
+            workshopGenerator.saveNew()
 
         when:
-            Map model = controller.statistics(workshop.teachersEmail)
+            List<Workshop> workshops = workshopRepository.findByStudents(user)
 
         then:
-            model.workshops."${workshop.name}"."${user.role}".size() == 1
+            workshops.size() == 2
     }
 }

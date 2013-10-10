@@ -20,10 +20,10 @@
             <p>Room: <span th:text="${workshop.room}" /> </p>
             <p>Teacher: <span th:text="${workshop.teacher}" /> </p>
             <p>Number of slots open: <span th:text="${workshop.howManySlotsAreFree()}" /> / <span th:text="${workshop.getLimit()}" /></p>
-            <!--<form action="/unregister" method="post">
+            <form action="/unregister" method="post">
                 <input type="hidden" name="workshopName" value="" th:attr="value=${workshop.name}"/>
                 <input type="submit" value="Unregister"/>
-            </form>-->
+            </form>
         </div>
 
         <h1>Other workshops you can still register to:</h1>

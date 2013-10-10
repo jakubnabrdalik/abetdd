@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,11 @@ public class WelcomeController {
         this.userRepository = userRepository;
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String poorManIndex() {
+        return "redirect:/index";
+    }
+
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public Map list() {
         List<Workshop> workshops = workshopRepository.findAll();
@@ -35,11 +41,11 @@ public class WelcomeController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(String email) {
+    public String login(@RequestParam("email") String email) {
         User user = userRepository.findOne(email);
         verifyUserExists(user);
         loggedUserRepository.login(user);
-        return "/myWorkshops";
+        return "redirect:/myWorkshops";
     }
 
     private void verifyUserExists(User user) {
