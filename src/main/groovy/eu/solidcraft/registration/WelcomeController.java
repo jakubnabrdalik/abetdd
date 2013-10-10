@@ -15,11 +15,15 @@ import static org.springframework.util.Assert.notNull;
 public class WelcomeController {
     private WorkshopRepository workshopRepository;
     private BySessionSorter bySessionSorter = new BySessionSorter();
+    private LoggedUserRepository loggedUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public WelcomeController(WorkshopRepository workshopRepository) {
+    public WelcomeController(WorkshopRepository workshopRepository, LoggedUserRepository loggedUserRepository, UserRepository userRepository) {
         notNull(workshopRepository);
         this.workshopRepository = workshopRepository;
+        this.loggedUserRepository = loggedUserRepository;
+        this.userRepository = userRepository;
     }
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
@@ -28,5 +32,19 @@ public class WelcomeController {
         List<Workshop> morningWorkshops = bySessionSorter.filterBySession(workshops, Session.MORNING);
         List<Workshop> eveningWorkshops = bySessionSorter.filterBySession(workshops, Session.EVENING);
         return ImmutableMap.of("morningWorkshops", morningWorkshops, "eveningWorkshops", eveningWorkshops);
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(String email) {
+        User user = userRepository.findOne(email);
+        verifyUserExists(user);
+        loggedUserRepository.login(user);
+        return "/myWorkshops";
+    }
+
+    private void verifyUserExists(User user) {
+        if(user == null) {
+            throw new NoSuchUserException();
+        }
     }
 }

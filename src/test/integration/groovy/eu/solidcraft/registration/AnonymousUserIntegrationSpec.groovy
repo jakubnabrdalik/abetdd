@@ -1,5 +1,6 @@
 package eu.solidcraft.registration
 
+import eu.solidcraft.generators.UserGenerator
 import eu.solidcraft.generators.WorkshopGenerator
 import eu.solidcraft.testbase.IntegrationSpec
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,17 +12,25 @@ class AnonymousUserIntegrationSpec extends IntegrationSpec {
     @Autowired
     WorkshopRepository workshopRepository
 
-    WorkshopGenerator generator
+    @Autowired
+    UserRepository userRepository
+
+    @Autowired
+    LoggedUserRepository loggedUserRepository
+
+    WorkshopGenerator workshopGenerator
+    UserGenerator userGenerator
 
     def setup() {
-        generator = new WorkshopGenerator(workshopRepository)
+        workshopGenerator = new WorkshopGenerator(workshopRepository)
+        userGenerator = new UserGenerator(userRepository)
     }
 
 
     def "should show lists of morning and evening workshops"() {
         given:
-            Workshop eveningWorkshop = generator.saveNew(Session.EVENING)
-            Workshop morningWorkshop = generator.saveNew(Session.MORNING)
+            Workshop eveningWorkshop = workshopGenerator.saveNew(Session.EVENING)
+            Workshop morningWorkshop = workshopGenerator.saveNew(Session.MORNING)
 
         when:
             Map workshops = controller.list()
@@ -32,10 +41,22 @@ class AnonymousUserIntegrationSpec extends IntegrationSpec {
     }
 
     def "should allow me to login with email"() {
+        given:
+            User user = userGenerator.saveNew("jnb@solidcraft.eu")
 
+        when:
+            controller.login(user.email)
+
+        then:
+            loggedUserRepository.getLoggedUser() == user
     }
 
     def "login should throw exception if no user with given email found"() {
+        when:
+            controller.login("some@bad.email")
 
+        then:
+            thrown(NoSuchUserException)
     }
+
 }
