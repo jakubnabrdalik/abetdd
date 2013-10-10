@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.util.Assert.notNull;
+
 @Controller
 public class WelcomeController {
     private WorkshopRepository workshopRepository;
@@ -16,6 +18,7 @@ public class WelcomeController {
 
     @Autowired
     public WelcomeController(WorkshopRepository workshopRepository) {
+        notNull(workshopRepository);
         this.workshopRepository = workshopRepository;
     }
 

@@ -22,7 +22,6 @@ class WorkshopGenerator {
         return (1..howMany).collect{saveNew(session)}
     }
 
-
     private Workshop create() {
         Workshop workshop = new Workshop()
         workshop.limit = 100
