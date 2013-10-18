@@ -6,7 +6,3 @@ build
 *.iws
 *.iml
 out
-gradle
-gradlew
-gradlew.bat
-
